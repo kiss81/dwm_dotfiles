@@ -2,6 +2,7 @@
 
 ## installation on ubuntu 20.04 netboot
 ```
+sudo apt update; sudo apt -y install git
 git clone https://github.com/kiss81/dwm_dotfiles.git
 cd dwm_dotfiles
 ./install.sh
