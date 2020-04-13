@@ -1,4 +1,10 @@
 # dwm_dotfiles
+This install script is meant for personal use, but feel free to use (parts) of it.
+
+## features
+Very low RAM usage as it's vanilla DWM on ubuntu without display manager.
+The script does autologin the current user
+recommended is to ecnrypt the home directory so that's the "login" prompted before booting into DWM.
 
 ## installation on ubuntu 20.04 netboot
 ```
