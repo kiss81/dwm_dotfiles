@@ -1,0 +1,23 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+/usr/bin/sleep 8
+/home/sander/powertop.sh
+/usr/bin/sleep 2
+/usr/bin/echo 2 | /usr/bin/tee /sys/bus/usb/devices/*/power/autosuspend >/dev/null
+/usr/bin/intel-undervolt apply
+/usr/bin/sleep 1
+/usr/sbin/rfkill block bluetooth
+/usr/bin/sleep 1
+/usr/sbin/ifconfig enp0s31f6 down
+exit 0
