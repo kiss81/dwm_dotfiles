@@ -1,7 +1,10 @@
 # dwm_dotfiles
 
-## installation
+## installation on ubuntu 19.10 netboot
+```
 git....
+install.sh
+```
 
 ## DWM cheatssheet
 
