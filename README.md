@@ -5,7 +5,8 @@ git....
 
 ## DWM cheatssheet
 
-'Basic
+```
+Basic
 =====
 
 [Shift]+[Mod]+[Enter]   - launch terminal.
@@ -46,4 +47,5 @@ Floating
 [Mod]+[L M B]           - to move the floating window around.
 [Mod]+[Space]           - to change the layout into floating mode.
 [Mod]+[Shift]+[Space]   - to make an individual window float.
-[Mod]+[M M B]           - to make an individual window un-float.'
+[Mod]+[M M B]           - to make an individual window un-float.
+```
