@@ -13,11 +13,9 @@
 
 /usr/bin/sleep 1
 /home/sander/powertop.sh
-/usr/bin/sleep 1
 /usr/bin/echo 2 | /usr/bin/tee /sys/bus/usb/devices/*/power/autosuspend >/dev/null
 /usr/bin/intel-undervolt apply
-/usr/bin/sleep 1
 /usr/sbin/rfkill block bluetooth
-/usr/bin/sleep 1
-/usr/sbin/ifconfig enp0s31f6 down
+#/usr/bin/sleep 1
+#/usr/sbin/ifconfig enp0s31f6 down
 exit 0

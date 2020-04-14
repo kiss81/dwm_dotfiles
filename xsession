@@ -5,10 +5,11 @@ alsactl --file ~/.v/asound.state restore
 feh --bg-scale wallpaper.png &
 
 # mirror screens example
-xrandr --output HDMI-0 --same-as DVI-D-0
+#xrandr --output HDMI-0 --same-as DVI-D-0
 
 # Autostart
 #isavailable skype && skype &
+/usr/bin/xbindkeys
 /usr/bin/redshift &
 
 (conky | while read LINE; do xsetroot -name "$LINE"; done) &

@@ -4,10 +4,10 @@ SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 sudo apt update; sudo apt dist-upgrade -y
 # core install
-sudo apt -y install build-essential git xinit dwm feh suckless-tools conky acpi-support alsa-utils pulseaudio lm-sensors curl wget htop seahorse software-properties-common bluez sshuttle usb-creator-gtk
+sudo apt -y install build-essential git xinit dwm feh suckless-tools conky acpi-support alsa-utils pulseaudio lm-sensors curl wget htop seahorse software-properties-common bluez sshuttle usb-creator-gtk rfkill xbindkeys deepin-icon-theme mousepad
 
 #extra install 
-sudo apt -y install screen remmina remmina-plugin-vnc firefox virt-viewer numix-gtk-theme papirus-icon-theme smbclient terminator cifs-utils nfs-common gvfs-fuse android-file-transfer
+sudo apt -y install screen remmina remmina-plugin-vnc firefox virt-viewer numix-gtk-theme papirus-icon-theme smbclient terminator cifs-utils nfs-common gvfs-fuse android-file-transfer --no-install-recommends
 sudo apt -y install thunar thunar-volman tumbler tumbler-plugins-extra ffmpegthumbnailer gthumb gvfs gvfs-backends --no-install-recommends
 
 # core settup stuff
@@ -65,12 +65,19 @@ sudo cp intel-undervolt.conf /etc/intel-undervolt.conf
 sudo usermod -aG dialout $USER
 
 #nvidia
-sudo apt -y install nvidia-driver-440 --no-install-recommends
+sudo add-apt-repository -y ppa:graphics-drivers/ppa
+sudo apt update;
+sudo apt -y install nvidia-driver-440 nvidia-prime --no-install-recommends
 
-# todo 
+#intel
+sudo mkdir /etc/X11/xorg.conf.d/
+sudo cp 20-intel.conf /etc/X11/xorg.conf.d/
+
+# todo
 #gtk theme numix as default?
 #network tools
 #fix  hardcoded login sander to $USER
+#fix try SNA in 20 intel file
 
 #network tools
 sudo apt -y install wpasupplicant
@@ -89,3 +96,6 @@ cp ff2mpv.json ~/.mozilla/native-messaging-hosts/
 sudo add-apt-repository -y ppa:saiarcot895/chromium-dev
 sudo apt update;
 sudo apt -y install chromium-browser
+
+#keybindsrc
+cp xbindkeysrc ~/.xbindkeysrc
