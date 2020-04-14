@@ -2,12 +2,13 @@
 
 SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
-sudo apt update;
+sudo apt update; sudo apt dist-upgrade
 # core install
-sudo apt -y install build-essential git dwm suckless-tools xorg conky acpi-support alsa-utils pulseaudio lm-sensors curl wget htop
-#extra install 
-sudo apt -y install screen remmina remmina-plugin-vnc firefox virt-viewer numix-gtk-theme thunar papirus-icon-theme smbclient tumbler tumbler-plugins-extra ffmpegthumbnailer
+sudo apt install build-essential git xinit dwm feh suckless-tools conky acpi-support alsa-utils pulseaudio lm-sensors curl wget htop seahorse software-properties-common bluez
 
+#extra install 
+sudo apt install screen remmina remmina-plugin-vnc firefox virt-viewer numix-gtk-theme papirus-icon-theme smbclient terminator cifs-utils nfs-common gvfs-fuse
+sudo apt install thunar thunar-volman tumbler tumbler-plugins-extra ffmpegthumbnailer gthumb gvfs gvfs-backends --no-install-recommends
 
 # core settup stuff
 cp xsession ~/.xsession
@@ -25,6 +26,7 @@ sudo systemctl enable getty@tty1.service
 sudo systemctl daemon-reload
 sudo systemd-analyze verify getty@tty1.service
 cp bash_profile ~/.bash_profile
+cp bash_aliases ~/.bash_aliases
 
 # rc.local
 sudo cp rc.local /etc/
@@ -32,21 +34,21 @@ sudo cp rc-local.service /etc/systemd/system/
 sudo systemctl enable rc-local
 
 # office
-sudo apt -y install libreoffice aspell-nl cups
+sudo apt install libreoffice aspell-nl cups
 
 # multimedia
-sudo apt -y install mpv youtube-dl celluloid
+sudo apt install mpv youtube-dl celluloid
 
 #redshift
-sudo apt -y install redshift-gtk
+sudo apt install redshift-gtk --no-install-recommends
 cp redshift.conf ~/.config/
 
 #dpi and wallpaper
-cp wallpaper.pgn ~/
+cp wallpaper.png ~/
 cp Xresources ~/.Xresources
 
 # laptop tools
-sudo apt -y install tlp-rdw powertop
+sudo apt install powertop
 cp powertop.sh ~/
 
 cd ~/
@@ -62,8 +64,28 @@ sudo cp intel-undervolt.conf /etc/intel-undervolt.conf
 #development
 sudo usermod -aG dialout $USER
 
+#nvidia
+sudo apt install nvidia-driver-440 --no-install-recommends
 
 # todo 
 #gtk theme numix as default?
 #network tools
 #fix  hardcoded login sander to $USER
+
+#network tools
+sudo apt install wpasupplicant
+sudo apt install net-tools
+
+#ff2mpv for firefox
+cd ~/
+git clone https://github.com/woodruffw/ff2mpv
+chmod +x ff2mpv/ff2mpv.py
+cd $SCRIPTPATH
+mkdir ~/.mozilla
+mkdir ~/.mozilla/native-messaging-hosts
+cp ff2mpv.json ~/.mozilla/native-messaging-hosts/
+
+#chromium
+sudo add-apt-repository -y ppa:saiarcot895/chromium-dev
+sudo apt update;
+sudo apt install chromium-browser

@@ -11,9 +11,9 @@
 #
 # By default this script does nothing.
 
-/usr/bin/sleep 8
+/usr/bin/sleep 1
 /home/sander/powertop.sh
-/usr/bin/sleep 2
+/usr/bin/sleep 1
 /usr/bin/echo 2 | /usr/bin/tee /sys/bus/usb/devices/*/power/autosuspend >/dev/null
 /usr/bin/intel-undervolt apply
 /usr/bin/sleep 1
