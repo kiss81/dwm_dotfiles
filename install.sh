@@ -66,6 +66,7 @@ sudo systemctl daemon-reload
 sudo systemd-analyze verify getty@tty1.service
 cp bash_profile ~/.bash_profile
 cp bash_aliases ~/.bash_aliases
+cp profile ~/.profile
 
 # rc.local
 sudo cp rc-local.service /etc/systemd/system/
@@ -135,6 +136,8 @@ fi
 
 #development
 sudo usermod -aG dialout $USER
+git config --global credential.helper cache
+git config --global credential.helper 'cache --timeout=36000'
 
 
 # todo
@@ -163,3 +166,8 @@ sudo apt -y install chromium-browser
 
 #keybindsrc
 cp xbindkeysrc ~/.xbindkeysrc
+
+#clean apt cache dir
+sudo rm /var/cache/apt/archives/*.deb
+
+
