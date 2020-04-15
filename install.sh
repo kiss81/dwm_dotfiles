@@ -40,7 +40,10 @@ sudo apt -y install build-essential git xinit dwm feh suckless-tools conky acpi-
 
 #extra install 
 sudo apt -y install screen remmina remmina-plugin-vnc firefox virt-viewer numix-gtk-theme papirus-icon-theme smbclient terminator cifs-utils nfs-common gvfs-fuse android-file-transfer --no-install-recommends
-sudo apt -y install thunar thunar-volman tumbler tumbler-plugins-extra ffmpegthumbnailer gthumb gvfs gvfs-backends --no-install-recommends
+sudo apt -y install thunar thunar-volman tumbler tumbler-plugins-extra ffmpegthumbnailer gthumb gvfs gvfs-backends ntp --no-install-recommends
+
+# make time dual boot compatible with windows
+sudo timedatectl set-local-rtc 1 --adjust-system-clock
 
 # core settup stuff
 mkdir ~/.config
