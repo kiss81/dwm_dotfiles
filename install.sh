@@ -2,7 +2,32 @@
 
 SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
+#MACHINE="T480"
+#MACHINE="XPS9560"
+MACHINE="AUDIOPC"
+
 sudo apt update; sudo apt dist-upgrade -y
+
+if [ $MACHINE == "T480" ]
+	cp xsession ~/.xsession
+	cp XresourcesT480 ~/.Xresources
+then
+
+elif [ $MACHINE == "XPS9560" ]
+	cp xsession ~/.xsession
+	cp XresourcesXps9560 ~/.Xresources
+
+then
+elif [ $MACHINE == "AUDIOPC" ]
+	cp xsessionAudioPc ~/.xsession
+	cp Xresources ~/.Xresources
+then
+else
+ echo "No machine selected";
+ exit 1;
+fi
+
+
 # core install
 sudo apt -y install build-essential git xinit dwm feh suckless-tools conky acpi-support alsa-utils pulseaudio lm-sensors curl wget htop seahorse software-properties-common bluez sshuttle usb-creator-gtk rfkill xbindkeys deepin-icon-theme mousepad
 
@@ -11,13 +36,17 @@ sudo apt -y install screen remmina remmina-plugin-vnc firefox virt-viewer numix-
 sudo apt -y install thunar thunar-volman tumbler tumbler-plugins-extra ffmpegthumbnailer gthumb gvfs gvfs-backends --no-install-recommends
 
 # core settup stuff
-cp xsession ~/.xsession
 mkdir ~/.config
 mkdir ~/.config/conky
 cp conky.conf ~/.config/conky/conky.conf
 mkdir ~/.config/gtk-3.0/
 cp settings.ini ~/.config/gtk-3.0/
 cp gtkrc-2.0 ~/.gtkrc-2.0
+
+#dpi and wallpaper
+cp wallpaper.png ~/
+
+
 
 #autostartx without xdm
 sudo mkdir /etc/systemd/system/getty@tty1.service.d/
@@ -43,35 +72,63 @@ sudo apt -y install mpv youtube-dl celluloid
 sudo apt -y install redshift-gtk --no-install-recommends
 cp redshift.conf ~/.config/
 
-#dpi and wallpaper
-cp wallpaper.png ~/
-cp Xresources ~/.Xresources
-
 # laptop tools
 sudo apt -y install powertop
 cp powertop.sh ~/
 
-cd ~/
-git clone https://github.com/kitsunyan/intel-undervolt.git
-cd intel-undervolt
-./configure
-make
-sudo make install
+if [ $MACHINE == "T480" ]
+	cd ~/
+	git clone https://github.com/kitsunyan/intel-undervolt.git
+	cd intel-undervolt
+	./configure
+	make
+	sudo make install
 
-cd $SCRIPTPATH
-sudo cp intel-undervolt.conf /etc/intel-undervolt.conf
+	cd $SCRIPTPATH
+	sudo cp intel-undervoltT480.conf /etc/intel-undervolt.conf
+
+	#intel
+	sudo mkdir /etc/X11/xorg.conf.d/
+	sudo cp 20-intel.conf /etc/X11/xorg.conf.d/
+
+then
+
+elif [ $MACHINE == "XPS9560" ]
+	cd ~/
+	git clone https://github.com/kitsunyan/intel-undervolt.git
+	cd intel-undervolt
+	./configure
+	make
+	sudo make install
+
+	cd $SCRIPTPATH
+	sudo cp intel-undervoltXps9560.conf /etc/intel-undervolt.conf
+	cp xsession ~/.xsession
+	cp XresourcesXps9560 ~/.Xresources
+
+	#nvidia
+	sudo add-apt-repository -y ppa:graphics-drivers/ppa
+	sudo apt update;
+	sudo apt -y install nvidia-driver-440 nvidia-prime --no-install-recommends
+
+	#intel
+	sudo mkdir /etc/X11/xorg.conf.d/
+	sudo cp 20-intel.conf /etc/X11/xorg.conf.d/
+then
+elif [ $MACHINE == "AUDIOPC" ]
+	#nvidia
+	sudo add-apt-repository -y ppa:graphics-drivers/ppa
+	sudo apt update;
+	sudo apt -y install nvidia-driver-440 --no-install-recommends
+then
+else
+ echo "No machine selected";
+ exit 1;
+fi
 
 #development
 sudo usermod -aG dialout $USER
 
-#nvidia
-sudo add-apt-repository -y ppa:graphics-drivers/ppa
-sudo apt update;
-sudo apt -y install nvidia-driver-440 nvidia-prime --no-install-recommends
-
-#intel
-sudo mkdir /etc/X11/xorg.conf.d/
-sudo cp 20-intel.conf /etc/X11/xorg.conf.d/
 
 # todo
 #gtk theme numix as default?
