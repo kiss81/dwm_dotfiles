@@ -9,23 +9,27 @@ MACHINE="AUDIOPC"
 sudo apt update; sudo apt dist-upgrade -y
 
 if [ $MACHINE == "T480" ]
+then
 	cp xsession ~/.xsession
 	cp XresourcesT480 ~/.Xresources
-then
-
+	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text\"/g" /etc/default/grub
+	sudo sed -i "s/#GRUB_GFXMODE=.*/GRUB_GFXMODE=800x600/g" /etc/default/grub
 elif [ $MACHINE == "XPS9560" ]
+then
 	cp xsession ~/.xsession
 	cp XresourcesXps9560 ~/.Xresources
-
-then
+	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text pci=noaer pci=nomsi pcie_aspm=off\"/g" /etc/default/grub
+	sudo sed -i "s/#GRUB_GFXMODE=.*/GRUB_GFXMODE=800x600/g" /etc/default/grub
 elif [ $MACHINE == "AUDIOPC" ]
+then
 	cp xsessionAudioPc ~/.xsession
 	cp Xresources ~/.Xresources
-then
+	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text\"/g" /etc/default/grub
 else
  echo "No machine selected";
  exit 1;
 fi
+sudo update-grub;
 
 
 # core install
@@ -77,6 +81,7 @@ sudo apt -y install powertop
 cp powertop.sh ~/
 
 if [ $MACHINE == "T480" ]
+then
 	cd ~/
 	git clone https://github.com/kitsunyan/intel-undervolt.git
 	cd intel-undervolt
@@ -90,10 +95,8 @@ if [ $MACHINE == "T480" ]
 	#intel
 	sudo mkdir /etc/X11/xorg.conf.d/
 	sudo cp 20-intel.conf /etc/X11/xorg.conf.d/
-
-then
-
 elif [ $MACHINE == "XPS9560" ]
+then
 	cd ~/
 	git clone https://github.com/kitsunyan/intel-undervolt.git
 	cd intel-undervolt
@@ -114,13 +117,12 @@ elif [ $MACHINE == "XPS9560" ]
 	#intel
 	sudo mkdir /etc/X11/xorg.conf.d/
 	sudo cp 20-intel.conf /etc/X11/xorg.conf.d/
-then
 elif [ $MACHINE == "AUDIOPC" ]
+then
 	#nvidia
 	sudo add-apt-repository -y ppa:graphics-drivers/ppa
 	sudo apt update;
 	sudo apt -y install nvidia-driver-440 --no-install-recommends
-then
 else
  echo "No machine selected";
  exit 1;
