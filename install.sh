@@ -3,8 +3,8 @@
 SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 #MACHINE="T480"
-#MACHINE="XPS9560"
-MACHINE="AUDIOPC"
+MACHINE="XPS9560"
+#MACHINE="AUDIOPC"
 
 sudo apt update; sudo apt dist-upgrade -y
 
@@ -19,7 +19,7 @@ elif [ $MACHINE == "XPS9560" ]
 then
 	cp xsession ~/.xsession
 	cp XresourcesXps9560 ~/.Xresources
-	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text pci=noaer pci=nomsi pcie_aspm=off\"/g" /etc/default/grub
+	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text pci=noaer pcie_aspm=off\"/g" /etc/default/grub
 	sudo sed -i "s/#GRUB_GFXMODE=.*/GRUB_GFXMODE=800x600/g" /etc/default/grub
 	sudo cp rc.localXps9560 /etc/
 elif [ $MACHINE == "AUDIOPC" ]
