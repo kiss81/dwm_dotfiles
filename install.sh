@@ -14,17 +14,20 @@ then
 	cp XresourcesT480 ~/.Xresources
 	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text\"/g" /etc/default/grub
 	sudo sed -i "s/#GRUB_GFXMODE=.*/GRUB_GFXMODE=800x600/g" /etc/default/grub
+	sudo cp rc.localT480 /etc/
 elif [ $MACHINE == "XPS9560" ]
 then
 	cp xsession ~/.xsession
 	cp XresourcesXps9560 ~/.Xresources
 	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text pci=noaer pci=nomsi pcie_aspm=off\"/g" /etc/default/grub
 	sudo sed -i "s/#GRUB_GFXMODE=.*/GRUB_GFXMODE=800x600/g" /etc/default/grub
+	sudo cp rc.localXps9560 /etc/
 elif [ $MACHINE == "AUDIOPC" ]
 then
 	cp xsessionAudioPc ~/.xsession
 	cp Xresources ~/.Xresources
 	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text\"/g" /etc/default/grub
+	sudo cp rc.local /etc/
 else
  echo "No machine selected";
  exit 1;
@@ -62,7 +65,6 @@ cp bash_profile ~/.bash_profile
 cp bash_aliases ~/.bash_aliases
 
 # rc.local
-sudo cp rc.local /etc/
 sudo cp rc-local.service /etc/systemd/system/
 sudo systemctl enable rc-local
 

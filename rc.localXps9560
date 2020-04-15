@@ -11,4 +11,9 @@
 #
 # By default this script does nothing.
 
+/usr/bin/sleep 1
+/home/sander/powertop.sh
+/usr/bin/echo 2 | /usr/bin/tee /sys/bus/usb/devices/*/power/autosuspend >/dev/null
+/usr/bin/intel-undervolt apply
+/usr/sbin/rfkill block bluetooth
 exit 0
