@@ -3,8 +3,8 @@
 SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 #MACHINE="T480"
-#MACHINE="XPS9560"
-MACHINE="AUDIOPC"
+MACHINE="XPS9560"
+#MACHINE="AUDIOPC"
 
 sudo apt update; sudo apt dist-upgrade -y
 
@@ -32,8 +32,6 @@ else
  echo "No machine selected";
  exit 1;
 fi
-sudo update-grub;
-
 
 # core install
 sudo apt -y install build-essential git xinit dwm feh suckless-tools conky acpi-support acpi alsa-utils pulseaudio lm-sensors curl wget htop seahorse software-properties-common bluez sshuttle usb-creator-gtk rfkill xbindkeys deepin-icon-theme mousepad p7zip unrar xiccd colord
@@ -92,14 +90,15 @@ sudo apt-get purge nvidia* -y
 sudo apt-get autoremove --purge -y
 
 # uninstall current kernels
-sudo sudo apt-get purge linux-*generic* -y
-sudo apt install amd64-microcode intel-microcode iucode-tool -y
+sudo sudo apt-get purge linux*generic* -y
+sudo sudo apt-get purge linux*lowlatency* -y
+#sudo apt install amd64-microcode intel-microcode iucode-tool -y
 sudo apt-get autoremove --purge -y
 
 # install latest thanks to https://github.com/pimlie/ubuntu-mainline-kernel.sh
 sudo ./ubuntu-mainline-kernel.sh -i --yes
-sudo update-grub
 
+sudo rm -rf ~/intel-undervolt;
 
 if [ $MACHINE == "T480" ]
 then
@@ -182,19 +181,29 @@ sudo apt -y install chromium-browser
 #keybindsrc
 cp xbindkeysrc ~/.xbindkeysrc
 
+# color profiles
+sudo cp iccprofiles/*.icc /usr/share/color/icc/colord/
+sudo pkill xiccd
+pkill xiccd
+sudo systemctl restart colord
+/usr/bin/sleep 1
+xiccd &
+/usr/bin/sleep 1
+
+# switch
+#colormgr device-add-profile 'xrandr-HP LP2465-CZK81701H0' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+#colormgr device-add-profile 'xrandr-HP LP2465-CZK81103DD' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+#colormgr device-make-profile-default 'xrandr-HP LP2465-CZK81701H0' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+#colormgr device-make-profile-default 'xrandr-HP LP2465-CZK81103DD' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+
+#xps9560
+colormgr device-add-profile 'xrandr-eDP1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+colormgr device-make-profile-default 'xrandr-eDP1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+
+#update grub
+sudo update-grub
+
 #clean apt cache dir
 sudo rm /var/cache/apt/archives/*.deb
 #clean dmenu to force a rebuild
 rm ~/.cache/dmenu_run
-
-# color profiles
-sudo cp iccprofiles/*.icc /usr/share/color/icc/colord/
-sudo pkill xiccd
-sudo systemctl restart colord
-sudo xiccd &
-
-# switch
-colormgr device-add-profile 'xrandr-HP LP2465-CZK81701H0' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
-colormgr device-add-profile 'xrandr-HP LP2465-CZK81103DD' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
-colormgr device-make-profile-default 'xrandr-HP LP2465-CZK81701H0' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
-colormgr device-make-profile-default 'xrandr-HP LP2465-CZK81103DD' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
