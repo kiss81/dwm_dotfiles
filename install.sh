@@ -3,28 +3,28 @@
 SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 #MACHINE="T480"
-MACHINE="XPS9560"
-#MACHINE="AUDIOPC"
+#MACHINE="XPS9560"
+MACHINE="AUDIOPC"
 
 sudo apt update; sudo apt dist-upgrade -y
 
 if [ $MACHINE == "T480" ]
 then
-	cp xsession ~/.xsession
+	cp xinitrc ~/.xinitrc
 	cp XresourcesT480 ~/.Xresources
 	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text\"/g" /etc/default/grub
 	sudo sed -i "s/#GRUB_GFXMODE=.*/GRUB_GFXMODE=800x600/g" /etc/default/grub
 	sudo cp rc.localT480 /etc/
 elif [ $MACHINE == "XPS9560" ]
 then
-	cp xsession ~/.xsession
+	cp xinitrc ~/.xinitrc
 	cp XresourcesXps9560 ~/.Xresources
 	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text pci=noaer pcie_aspm=off\"/g" /etc/default/grub
 	sudo sed -i "s/#GRUB_GFXMODE=.*/GRUB_GFXMODE=800x600/g" /etc/default/grub
 	sudo cp rc.localXps9560 /etc/
 elif [ $MACHINE == "AUDIOPC" ]
 then
-	cp xsessionAudioPc ~/.xsession
+	cp xinitrcAudioPc ~/.xinitrc
 	cp Xresources ~/.Xresources
 	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text\"/g" /etc/default/grub
 	sudo cp rc.local /etc/
@@ -36,7 +36,7 @@ sudo update-grub;
 
 
 # core install
-sudo apt -y install build-essential git xinit dwm feh suckless-tools conky acpi-support acpi alsa-utils pulseaudio lm-sensors curl wget htop seahorse software-properties-common bluez sshuttle usb-creator-gtk rfkill xbindkeys deepin-icon-theme mousepad
+sudo apt -y install build-essential git xinit dwm feh suckless-tools conky acpi-support acpi alsa-utils pulseaudio lm-sensors curl wget htop seahorse software-properties-common bluez sshuttle usb-creator-gtk rfkill xbindkeys deepin-icon-theme mousepad p7zip unrar xiccd colord
 
 #extra install 
 sudo apt -y install screen remmina remmina-plugin-vnc firefox virt-viewer numix-gtk-theme papirus-icon-theme smbclient terminator cifs-utils nfs-common gvfs-fuse android-file-transfer --no-install-recommends
@@ -52,6 +52,7 @@ cp conky.conf ~/.config/conky/conky.conf
 mkdir ~/.config/gtk-3.0/
 cp settings.ini ~/.config/gtk-3.0/
 cp gtkrc-2.0 ~/.gtkrc-2.0
+cp -R bin ~/
 
 #dpi and wallpaper
 cp wallpaper.png ~/
@@ -73,7 +74,7 @@ sudo cp rc-local.service /etc/systemd/system/
 sudo systemctl enable rc-local
 
 # office
-sudo apt -y install libreoffice aspell-nl cups hunspell-nl
+sudo apt -y install libreoffice aspell-nl cups hunspell-nl atril
 
 # multimedia
 sudo apt -y install mpv youtube-dl celluloid
@@ -85,6 +86,20 @@ cp redshift.conf ~/.config/
 # laptop tools
 sudo apt -y install powertop
 cp powertop.sh ~/
+
+#cleanup old nvidia driver
+sudo apt-get purge nvidia* -y
+sudo apt-get autoremove --purge -y
+
+# uninstall current kernels
+sudo sudo apt-get purge linux-*generic* -y
+sudo apt install amd64-microcode intel-microcode iucode-tool -y
+sudo apt-get autoremove --purge -y
+
+# install latest thanks to https://github.com/pimlie/ubuntu-mainline-kernel.sh
+sudo ./ubuntu-mainline-kernel.sh -i --yes
+sudo update-grub
+
 
 if [ $MACHINE == "T480" ]
 then
@@ -169,5 +184,17 @@ cp xbindkeysrc ~/.xbindkeysrc
 
 #clean apt cache dir
 sudo rm /var/cache/apt/archives/*.deb
+#clean dmenu to force a rebuild
+rm ~/.cache/dmenu_run
 
+# color profiles
+sudo cp iccprofiles/*.icc /usr/share/color/icc/colord/
+sudo pkill xiccd
+sudo systemctl restart colord
+sudo xiccd &
 
+# switch
+colormgr device-add-profile 'xrandr-HP LP2465-CZK81701H0' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+colormgr device-add-profile 'xrandr-HP LP2465-CZK81103DD' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+colormgr device-make-profile-default 'xrandr-HP LP2465-CZK81701H0' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+colormgr device-make-profile-default 'xrandr-HP LP2465-CZK81103DD' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
