@@ -34,7 +34,7 @@ else
 fi
 
 # core install
-sudo apt -y install build-essential git xinit dwm feh suckless-tools conky acpi-support acpi alsa-utils pulseaudio lm-sensors curl wget htop seahorse software-properties-common bluez sshuttle usb-creator-gtk rfkill xbindkeys deepin-icon-theme mousepad p7zip unrar xiccd colord
+sudo apt -y install build-essential git xinit dwm feh suckless-tools conky acpi-support acpi alsa-utils pulseaudio lm-sensors curl wget htop seahorse software-properties-common bluez sshuttle usb-creator-gtk rfkill xbindkeys deepin-icon-theme mousepad p7zip unrar xiccd colord --no-install-recommends
 
 #extra install 
 sudo apt -y install screen remmina remmina-plugin-vnc firefox virt-viewer numix-gtk-theme papirus-icon-theme smbclient terminator cifs-utils nfs-common gvfs-fuse android-file-transfer --no-install-recommends
@@ -72,10 +72,10 @@ sudo cp rc-local.service /etc/systemd/system/
 sudo systemctl enable rc-local
 
 # office
-sudo apt -y install libreoffice aspell-nl cups hunspell-nl atril
+sudo apt -y install libreoffice aspell-nl cups hunspell-nl atril --no-install-recommends
 
 # multimedia
-sudo apt -y install mpv youtube-dl celluloid
+sudo apt -y install mpv youtube-dl celluloid --no-install-recommends
 
 #redshift
 sudo apt -y install redshift-gtk --no-install-recommends
