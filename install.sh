@@ -187,9 +187,9 @@ sudo cp iccprofiles/*.icc /usr/share/color/icc/colord/
 sudo pkill xiccd
 pkill xiccd
 sudo systemctl restart colord
-/usr/bin/sleep 1
+/usr/bin/sleep 3
 xiccd &
-/usr/bin/sleep 1
+/usr/bin/sleep 3
 
 # switch
 #colormgr device-add-profile 'xrandr-HP LP2465-CZK81701H0' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
