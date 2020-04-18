@@ -14,14 +14,14 @@ then
 	cp XresourcesT480 ~/.Xresources
 	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text\"/g" /etc/default/grub
 	sudo sed -i "s/#GRUB_GFXMODE=.*/GRUB_GFXMODE=800x600/g" /etc/default/grub
-	sudo cp rc.localT480 /etc/
+	sudo cp rc.localT480 /etc/rc.local
 elif [ $MACHINE == "XPS9560" ]
 then
 	cp xinitrc ~/.xinitrc
 	cp XresourcesXps9560 ~/.Xresources
 	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text pci=noaer pcie_aspm=off\"/g" /etc/default/grub
 	sudo sed -i "s/#GRUB_GFXMODE=.*/GRUB_GFXMODE=800x600/g" /etc/default/grub
-	sudo cp rc.localXps9560 /etc/
+	sudo cp rc.localXps9560 /etc/rc.local
 elif [ $MACHINE == "AUDIOPC" ]
 then
 	cp xinitrcAudioPc ~/.xinitrc
