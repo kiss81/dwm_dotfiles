@@ -198,8 +198,8 @@ xiccd &
 #colormgr device-make-profile-default 'xrandr-HP LP2465-CZK81103DD' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
 
 #xps9560
-colormgr device-add-profile 'xrandr-eDP1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
-colormgr device-make-profile-default 'xrandr-eDP1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+colormgr device-add-profile 'xrandr-eDP-1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+colormgr device-make-profile-default 'xrandr-eDP-1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
 
 #update grub
 sudo update-grub
