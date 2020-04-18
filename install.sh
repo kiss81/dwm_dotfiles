@@ -34,7 +34,8 @@ else
 fi
 
 # core install
-sudo apt -y install build-essential git xinit dwm feh suckless-tools conky acpi-support acpi alsa-utils pulseaudio lm-sensors curl wget htop seahorse software-properties-common bluez sshuttle usb-creator-gtk rfkill xbindkeys deepin-icon-theme mousepad p7zip unrar xiccd colord --no-install-recommends
+sudo apt -y install xinit dwm feh suckless-tools acpi-support acpi xbindkeys xbacklight
+sudo apt -y install build-essential git conky alsa-utils pulseaudio lm-sensors curl wget htop seahorse software-properties-common bluez sshuttle usb-creator-gtk rfkill deepin-icon-theme mousepad p7zip unrar xiccd colord --no-install-recommends
 
 #extra install 
 sudo apt -y install screen remmina remmina-plugin-vnc firefox virt-viewer numix-gtk-theme papirus-icon-theme smbclient terminator cifs-utils nfs-common gvfs-fuse android-file-transfer --no-install-recommends
@@ -92,7 +93,7 @@ sudo apt-get autoremove --purge -y
 # uninstall current kernels
 sudo sudo apt-get purge linux*generic* -y
 sudo sudo apt-get purge linux*lowlatency* -y
-#sudo apt install amd64-microcode intel-microcode iucode-tool -y
+sudo apt install amd64-microcode intel-microcode iucode-tool -y
 sudo apt-get autoremove --purge -y
 
 # install latest thanks to https://github.com/pimlie/ubuntu-mainline-kernel.sh
@@ -132,7 +133,7 @@ then
 	#nvidia
 	sudo add-apt-repository -y ppa:graphics-drivers/ppa
 	sudo apt update;
-	sudo apt -y install nvidia-driver-440 nvidia-prime --no-install-recommends
+	sudo apt -y install nvidia-utils-440 nvidia-dkms-440 nvidia-prime --no-install-recommends
 
 	#intel
 	sudo mkdir /etc/X11/xorg.conf.d/
