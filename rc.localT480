@@ -18,4 +18,5 @@
 /usr/sbin/rfkill block bluetooth
 /usr/bin/sleep 1
 /usr/sbin/ifconfig enp0s31f6 down
+chmod 777 /sys/class/backlight/intel_backlight/brightness
 exit 0

@@ -16,4 +16,5 @@
 /usr/bin/echo 2 | /usr/bin/tee /sys/bus/usb/devices/*/power/autosuspend >/dev/null
 /usr/bin/intel-undervolt apply
 /usr/sbin/rfkill block bluetooth
+chmod 777 /sys/class/backlight/intel_backlight/brightness
 exit 0

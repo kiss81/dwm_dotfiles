@@ -182,6 +182,11 @@ sudo apt -y install chromium-browser
 #keybindsrc
 cp xbindkeysrc ~/.xbindkeysrc
 
+# backlight control scripts for intel modesetting driver
+cp setbacklightMin.sh ~/
+cp setbacklightPlus.sh ~/
+
+
 # color profiles
 sudo cp iccprofiles/*.icc /usr/share/color/icc/colord/
 sudo pkill xiccd
