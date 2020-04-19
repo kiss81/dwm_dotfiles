@@ -90,15 +90,6 @@ cp powertop.sh ~/
 sudo apt-get purge nvidia* -y
 sudo apt-get autoremove --purge -y
 
-# uninstall current kernels
-sudo sudo apt-get purge linux*generic* -y
-sudo sudo apt-get purge linux*lowlatency* -y
-sudo apt install amd64-microcode intel-microcode iucode-tool -y
-sudo apt-get autoremove --purge -y
-
-# install latest thanks to https://github.com/pimlie/ubuntu-mainline-kernel.sh
-sudo ./ubuntu-mainline-kernel.sh -i --yes
-
 sudo rm -rf ~/intel-undervolt;
 
 if [ $MACHINE == "T480" ]
@@ -134,6 +125,9 @@ then
 	sudo add-apt-repository -y ppa:graphics-drivers/ppa
 	sudo apt update;
 	sudo apt -y install nvidia-utils-440 nvidia-dkms-440 nvidia-prime --no-install-recommends
+        sudo apt-get install libnvidia-cfg1-440 libnvidia-gl-440 pkg-config nvidia-utils-440 libgl1-mesa-glx
+	sudo nvidia-xconfig -a --cool-bits=28 --allow-empty-initial-configuration
+
 
 	#intel
 	sudo mkdir /etc/X11/xorg.conf.d/
@@ -143,11 +137,29 @@ then
 	#nvidia
 	sudo add-apt-repository -y ppa:graphics-drivers/ppa
 	sudo apt update;
-	sudo apt -y install nvidia-driver-440 --no-install-recommends
+        sudo apt -y install nvidia-utils-440 nvidia-dkms-440 --no-install-recommends
+        sudo apt-get install libnvidia-cfg1-440 libnvidia-gl-440 pkg-config nvidia-utils-440 libgl1-mesa-glx
+	sudo nvidia-xconfig -a --cool-bits=28 --allow-empty-initial-configuration
 else
  echo "No machine selected";
  exit 1;
 fi
+
+# uninstall current kernels
+sudo sudo apt-get purge linux*generic* -y
+sudo sudo apt-get purge linux*lowlatency* -y
+sudo apt install amd64-microcode intel-microcode iucode-tool -y
+sudo apt-get autoremove --purge -y
+
+# install latest thanks to https://github.com/pimlie/ubuntu-mainline-kernel.sh
+sudo ./ubuntu-mainline-kernel.sh -i --yes
+
+#rebuild nvidia kernel
+sudo dpkg-reconfigure nvidia-dkms-440
+sudo dpkg-reconfigure nvidia-utils-440
+
+#select intel driver as default
+sudo prime-select intel
 
 #development
 sudo usermod -aG dialout $USER
