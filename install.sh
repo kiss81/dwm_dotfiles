@@ -19,7 +19,7 @@ elif [ $MACHINE == "XPS9560" ]
 then
 	cp xinitrc ~/.xinitrc
 	cp XresourcesXps9560 ~/.Xresources
-	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text pci=noaer pcie_aspm=off\"/g" /etc/default/grub
+	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text pci=noaer pcie_aspm=off nouveau.modeset=0\"/g" /etc/default/grub
 	sudo sed -i "s/#GRUB_GFXMODE=.*/GRUB_GFXMODE=800x600/g" /etc/default/grub
 	sudo cp rc.localXps9560 /etc/rc.local
 elif [ $MACHINE == "AUDIOPC" ]
@@ -121,12 +121,18 @@ then
 	cp xsession ~/.xsession
 	cp XresourcesXps9560 ~/.Xresources
 
+	#blacklist nouveau
+	sudo bash -c "echo blacklist nouveau > /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+	sudo bash -c "echo options nouveau modeset=0 >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+	sudo update-initramfs -u
+
+
 	#nvidia
-	sudo add-apt-repository -y ppa:graphics-drivers/ppa
-	sudo apt update;
-	sudo apt -y install nvidia-utils-440 nvidia-dkms-440 nvidia-prime --no-install-recommends
-        sudo apt-get install libnvidia-cfg1-440 libnvidia-gl-440 pkg-config nvidia-utils-440 libgl1-mesa-glx
-	sudo nvidia-xconfig -a --cool-bits=28 --allow-empty-initial-configuration
+	#sudo add-apt-repository -y ppa:graphics-drivers/ppa
+	#sudo apt update;
+	#sudo apt -y install nvidia-utils-440 nvidia-dkms-440 nvidia-prime --no-install-recommends
+        #sudo apt-get -y install libnvidia-*-440 pkg-config nvidia-utils-440 libgl1-mesa-glx
+	#sudo nvidia-xconfig -a --cool-bits=28 --allow-empty-initial-configuration
 
 
 	#intel
@@ -138,7 +144,7 @@ then
 	sudo add-apt-repository -y ppa:graphics-drivers/ppa
 	sudo apt update;
         sudo apt -y install nvidia-utils-440 nvidia-dkms-440 --no-install-recommends
-        sudo apt-get install libnvidia-cfg1-440 libnvidia-gl-440 pkg-config nvidia-utils-440 libgl1-mesa-glx
+        sudo apt-get install pkg-config nvidia-*-440 libgl1-mesa-glx
 	sudo nvidia-xconfig -a --cool-bits=28 --allow-empty-initial-configuration
 else
  echo "No machine selected";
