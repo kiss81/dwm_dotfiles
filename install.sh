@@ -19,7 +19,7 @@ elif [ $MACHINE == "XPS9560" ]
 then
 	cp xinitrc ~/.xinitrc
 	cp XresourcesXps9560 ~/.Xresources
-	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text pci=noaer pcie_aspm=off nouveau.modeset=0\"/g" /etc/default/grub
+	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text pci=noaer pcie_aspm=off nouveau.modeset=0 nouveau.blacklist=1\"/g" /etc/default/grub
 	sudo sed -i "s/#GRUB_GFXMODE=.*/GRUB_GFXMODE=800x600/g" /etc/default/grub
 	sudo cp rc.localXps9560 /etc/rc.local
 elif [ $MACHINE == "AUDIOPC" ]
@@ -88,9 +88,21 @@ cp powertop.sh ~/
 
 #cleanup old nvidia driver
 sudo apt-get purge nvidia* -y
+sudo apt-get purge libnvidia* -y
+sudo apt-get purge xserver-xorg-video-nvidia* -y
 sudo apt-get autoremove --purge -y
 
 sudo rm -rf ~/intel-undervolt;
+
+# uninstall current kernels
+sudo sudo apt-get purge linux*5*generic* -y
+sudo sudo apt-get purge linux*5*lowlatency* -y
+sudo apt install amd64-microcode intel-microcode iucode-tool -y
+sudo apt-get autoremove --purge -y
+
+# install latest thanks to https://github.com/pimlie/ubuntu-mainline-kernel.sh
+sudo ./ubuntu-mainline-kernel.sh -i --yes
+
 
 if [ $MACHINE == "T480" ]
 then
@@ -120,47 +132,39 @@ then
 	sudo cp intel-undervoltXps9560.conf /etc/intel-undervolt.conf
 	cp xsession ~/.xsession
 	cp XresourcesXps9560 ~/.Xresources
+	cp -R xps9560/* ~/
 
 	#blacklist nouveau
 	sudo bash -c "echo blacklist nouveau > /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
 	sudo bash -c "echo options nouveau modeset=0 >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
 	sudo update-initramfs -u
 
-
 	#nvidia
-	#sudo add-apt-repository -y ppa:graphics-drivers/ppa
-	#sudo apt update;
-	#sudo apt -y install nvidia-utils-440 nvidia-dkms-440 nvidia-prime --no-install-recommends
-        #sudo apt-get -y install libnvidia-*-440 pkg-config nvidia-utils-440 libgl1-mesa-glx
-	#sudo nvidia-xconfig -a --cool-bits=28 --allow-empty-initial-configuration
-
+	sudo add-apt-repository -y ppa:graphics-drivers/ppa
+	sudo apt update;
+        sudo apt-get -y install nvidia-dkms-440 libnvidia*440 nvidia-utils-440 xserver-xorg-video-nvidia-440 nvidia-prime nvidia-compute-utils-440 libgl1-mesa-glx
 
 	#intel
 	sudo mkdir /etc/X11/xorg.conf.d/
 	sudo cp 20-intel.conf /etc/X11/xorg.conf.d/
 elif [ $MACHINE == "AUDIOPC" ]
 then
+	#blacklist nouveau
+	sudo bash -c "echo blacklist nouveau > /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+	sudo bash -c "echo options nouveau modeset=0 >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+	sudo update-initramfs -u
+
 	#nvidia
 	sudo add-apt-repository -y ppa:graphics-drivers/ppa
 	sudo apt update;
-        sudo apt -y install nvidia-utils-440 nvidia-dkms-440 --no-install-recommends
-        sudo apt-get install pkg-config nvidia-*-440 libgl1-mesa-glx
+        sudo apt-get -y install nvidia-dkms-440 libnvidia*440 nvidia-utils-440 xserver-xorg-video-nvidia-440 nvidia-prime nvidia-compute-utils-440 libgl1-mesa-glx
 	sudo nvidia-xconfig -a --cool-bits=28 --allow-empty-initial-configuration
 else
  echo "No machine selected";
  exit 1;
 fi
 
-# uninstall current kernels
-sudo sudo apt-get purge linux*generic* -y
-sudo sudo apt-get purge linux*lowlatency* -y
-sudo apt install amd64-microcode intel-microcode iucode-tool -y
-sudo apt-get autoremove --purge -y
-
-# install latest thanks to https://github.com/pimlie/ubuntu-mainline-kernel.sh
-sudo ./ubuntu-mainline-kernel.sh -i --yes
-
-#rebuild nvidia kernel
+#just for sure rebuild nvidia kernel
 sudo dpkg-reconfigure nvidia-dkms-440
 sudo dpkg-reconfigure nvidia-utils-440
 
@@ -224,7 +228,8 @@ xiccd &
 colormgr device-add-profile 'xrandr-eDP-1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
 colormgr device-make-profile-default 'xrandr-eDP-1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
 
-#update grub
+#update grub initramfs
+sudo update-initramfs -u
 sudo update-grub
 
 #clean apt cache dir
