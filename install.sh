@@ -19,7 +19,7 @@ elif [ $MACHINE == "XPS9560" ]
 then
 	cp xinitrc ~/.xinitrc
 	cp XresourcesXps9560 ~/.Xresources
-	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text pci=noaer pcie_aspm=off nouveau.modeset=0 nouveau.blacklist=1\"/g" /etc/default/grub
+	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text pci=noaer pcie_aspm=off\"/g" /etc/default/grub
 	sudo sed -i "s/#GRUB_GFXMODE=.*/GRUB_GFXMODE=800x600/g" /etc/default/grub
 	sudo cp rc.localXps9560 /etc/rc.local
 elif [ $MACHINE == "AUDIOPC" ]
@@ -133,11 +133,6 @@ then
 	cp xsession ~/.xsession
 	cp XresourcesXps9560 ~/.Xresources
 	cp -R xps9560/* ~/
-
-	#blacklist nouveau
-	sudo bash -c "echo blacklist nouveau > /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
-	sudo bash -c "echo options nouveau modeset=0 >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
-	sudo update-initramfs -u
 
 	#nvidia
 	sudo add-apt-repository -y ppa:graphics-drivers/ppa

@@ -26,5 +26,9 @@ feh --bg-scale wallpaper.png &
 /usr/bin/sleep 1
 /usr/bin/redshift &
 
+#fix gnome keyring
+mkdir -p "$HOME"/.local/share/keyrings
+source /etc/X11/xinit/xinitrc
+
 (conky | while read LINE; do xsetroot -name "$LINE"; done) &
 exec dwm
