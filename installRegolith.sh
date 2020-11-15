@@ -34,9 +34,12 @@ else
 fi
 sudo update-grub;
 
+#regolith install
+sudo add-apt-repository ppa:regolith-linux/release
+sudo apt install regolith-desktop-mobile
 
 # core install
-sudo apt -y install build-essential git acpi-support acpi lm-sensors curl wget htop sshuttle usb-creator-gtk rfkill mousepad p7zip unrar xiccd colord
+sudo apt -y install build-essential git acpi-support acpi cpufrequtils lm-sensors curl wget htop sshuttle usb-creator-gtk rfkill mousepad p7zip unrar xiccd colord
 
 #extra install 
 sudo apt -y install screen remmina remmina-plugin-vnc firefox virt-viewer papirus-icon-theme smbclient terminator cifs-utils nfs-common gvfs-fuse android-file-transfer --no-install-recommends
@@ -54,6 +57,7 @@ sudo timedatectl set-local-rtc 1 --adjust-system-clock
 #cp settings.ini ~/.config/gtk-3.0/
 #cp gtkrc-2.0 ~/.gtkrc-2.0
 cp -R bin ~/
+
 
 #dpi and wallpaper
 #cp wallpaper.png ~/
@@ -118,6 +122,10 @@ then
 	sudo cp 20-intel.conf /etc/X11/xorg.conf.d/
 elif [ $MACHINE == "XPS9560" ]
 then
+	#set powersave governer
+	cd $SCRIPTPATH
+	cp xps9560/cpufrequtils /etc/default/cpufrequtils
+
 	cd ~/
 	git clone https://github.com/kitsunyan/intel-undervolt.git
 	cd intel-undervolt
@@ -194,6 +202,8 @@ sudo systemctl restart colord
 sudo xiccd &
 
 # switch
+colormgr device-add-profile 'xrandr-eDP-1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+colormgr device-make-profile-default 'xrandr-eDP-1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
 #colormgr device-add-profile 'xrandr-HP LP2465-CZK81701H0' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
 #colormgr device-add-profile 'xrandr-HP LP2465-CZK81103DD' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
 #colormgr device-make-profile-default 'xrandr-HP LP2465-CZK81701H0' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
