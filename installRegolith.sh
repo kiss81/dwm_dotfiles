@@ -2,8 +2,8 @@
 
 SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
-#MACHINE="T480"
-MACHINE="XPS9560"
+MACHINE="T480"
+#MACHINE="XPS9560"
 #MACHINE="AUDIOPC"
 
 sudo apt update; sudo apt dist-upgrade -y
@@ -14,7 +14,7 @@ then
 	cp XresourcesT480 ~/.Xresources
 	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text\"/g" /etc/default/grub
 	sudo sed -i "s/#GRUB_GFXMODE=.*/GRUB_GFXMODE=800x600/g" /etc/default/grub
-	sudo cp rc.localT480 /etc/
+	sudo cp rc.localT480 /etc/rc.local
 elif [ $MACHINE == "XPS9560" ]
 then
 #	cp xinitrc ~/.xinitrc
@@ -115,11 +115,12 @@ then
 	sudo make install
 
 	cd $SCRIPTPATH
+	cp xps9560/cpufrequtils /etc/default/cpufrequtils
 	sudo cp intel-undervoltT480.conf /etc/intel-undervolt.conf
 
 	#intel
-	sudo mkdir /etc/X11/xorg.conf.d/
-	sudo cp 20-intel.conf /etc/X11/xorg.conf.d/
+	#sudo mkdir /etc/X11/xorg.conf.d/
+	#sudo cp 20-intel.conf /etc/X11/xorg.conf.d/
 elif [ $MACHINE == "XPS9560" ]
 then
 	#set powersave governer
@@ -177,10 +178,13 @@ git config --global credential.helper 'cache --timeout=36000'
 cd ~/
 git clone https://github.com/woodruffw/ff2mpv
 chmod +x ff2mpv/ff2mpv.py
-cd $SCRIPTPATH
-mkdir ~/.mozilla
-mkdir ~/.mozilla/native-messaging-hosts
-cp ff2mpv.json ~/.mozilla/native-messaging-hosts/
+chmod +x ff2mpv/install.sh
+cd ff2mpv
+./install.sh
+#cd $SCRIPTPATH
+#mkdir ~/.mozilla
+#mkdir ~/.mozilla/native-messaging-hosts
+#cp ff2mpv.json ~/.mozilla/native-messaging-hosts/
 
 #chromium
 #sudo add-apt-repository -y ppa:saiarcot895/chromium-dev
@@ -202,9 +206,13 @@ sudo systemctl restart colord
 sudo xiccd &
 
 # switch
-colormgr device-add-profile 'xrandr-eDP-1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
-colormgr device-make-profile-default 'xrandr-eDP-1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+#colormgr device-add-profile 'xrandr-eDP-1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+#colormgr device-make-profile-default 'xrandr-eDP-1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
 #colormgr device-add-profile 'xrandr-HP LP2465-CZK81701H0' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
 #colormgr device-add-profile 'xrandr-HP LP2465-CZK81103DD' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
 #colormgr device-make-profile-default 'xrandr-HP LP2465-CZK81701H0' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
 #colormgr device-make-profile-default 'xrandr-HP LP2465-CZK81103DD' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+
+#t480
+#colormgr device-add-profile 'xrandr-eDP-1' 'icc-b7209b0a4aa89caa00eefa844c28c134'
+#colormgr device-make-profile-default 'xrandr-eDP-1' 'icc-b7209b0a4aa89caa00eefa844c28c134'
