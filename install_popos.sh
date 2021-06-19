@@ -8,6 +8,11 @@ MACHINE="XPS9560"
 
 sudo apt update; sudo apt dist-upgrade -y
 
+# install grub
+sudo apt install grub-efi grub2-common
+sudo grub-install
+sudo cp /boot/grub/x86_64-efi/grub.efi /boot/efi/EFI/pop/grubx64.efi
+
 if [ $MACHINE == "T480" ]
 then
 	cp xinitrc ~/.xinitrc
