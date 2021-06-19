@@ -9,7 +9,7 @@ MACHINE="XPS9560"
 sudo apt update; sudo apt dist-upgrade -y
 
 # install grub
-sudo apt install grub-efi grub2-common
+sudo apt install grub-efi grub2-common -y
 sudo grub-install
 sudo cp /boot/grub/x86_64-efi/grub.efi /boot/efi/EFI/pop/grubx64.efi
 
@@ -176,10 +176,12 @@ git config --global credential.helper 'cache --timeout=36000'
 #sudo apt -y install net-tools
 
 #ff2mpv for firefox
+firefox &
+sleep 3
 cd ~/
 git clone https://github.com/woodruffw/ff2mpv
 cd ff2mpv
-./isntall.sh
+./install.sh
 #chmod +x ff2mpv/ff2mpv.py
 #cd $SCRIPTPATH
 #mkdir ~/.mozilla
@@ -200,7 +202,7 @@ sudo rm /var/cache/apt/archives/*.deb
 #rm ~/.cache/dmenu_run
 
 # color profiles
-sudo cp iccprofiles/*.icc /usr/share/color/icc/colord/
+sudo cp ~/dwm_dotfiles/iccprofiles/*.icc /usr/share/color/icc/colord/
 sudo pkill xiccd
 sudo systemctl restart colord
 sudo xiccd &
@@ -209,8 +211,8 @@ sudo xiccd &
 #colormgr device-add-profile 'xrandr-HP LP2465-CZK81701H0' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
 #colormgr device-add-profile 'xrandr-HP LP2465-CZK81103DD' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
 #xps9560
-colormgr device-add-profile 'xrandr-eDP-1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
-colormgr device-make-profile-default 'xrandr-eDP-1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+colormgr device-add-profile 'xrandr-eDP-1-1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+colormgr device-make-profile-default 'xrandr-eDP-1-1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
 
 #colormgr device-make-profile-default 'xrandr-HP LP2465-CZK81701H0' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
 #colormgr device-make-profile-default 'xrandr-HP LP2465-CZK81103DD' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
