@@ -19,8 +19,8 @@ elif [ $MACHINE == "XPS9560" ]
 then
 #	cp xinitrc ~/.xinitrc
 #	cp XresourcesXps9560 ~/.Xresources
-	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text pci=noaer pcie_aspm=off\"/g" /etc/default/grub
-	sudo sed -i "s/#GRUB_GFXMODE=.*/GRUB_GFXMODE=800x600/g" /etc/default/grub
+	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text msr.allow_writes=on pci=noaer pcie_aspm=off\"/g" /etc/default/grub
+	#sudo sed -i "s/#GRUB_GFXMODE=.*/GRUB_GFXMODE=800x600/g" /etc/default/grub
 	sudo cp rc.localXps9560 /etc/rc.local
 elif [ $MACHINE == "AUDIOPC" ]
 then
@@ -77,7 +77,11 @@ sudo systemctl enable rc-local
 sudo apt -y install libreoffice aspell-nl cups hunspell-nl atril
 
 # multimedia
-sudo apt -y install mpv youtube-dl
+sudo apt -y install mpv
+sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+sudo chmod a+rx /usr/local/bin/youtube-dl
+#set python
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 10
 
 #redshift
 sudo apt -y install redshift-gtk --no-install-recommends
@@ -131,13 +135,14 @@ then
 	#cp XresourcesXps9560 ~/.Xresources
 
 	#nvidia
-	sudo add-apt-repository -y ppa:graphics-drivers/ppa
-	sudo apt update;
+	#sudo add-apt-repository -y ppa:graphics-drivers/ppa
+	#sudo apt update;
 	#sudo apt -y install nvidia-driver-440 nvidia-prime --no-install-recommends
 
 	#intel
 	#sudo mkdir /etc/X11/xorg.conf.d/
 	#sudo cp 20-intel.conf /etc/X11/xorg.conf.d/
+        sudo cp /boot/grub/x86_64-efi/grub.efi /boot/efi/EFI/pop/grubx64.efi
 elif [ $MACHINE == "AUDIOPC" ]
 then
 	#nvidia
@@ -168,11 +173,13 @@ git config --global credential.helper 'cache --timeout=36000'
 #ff2mpv for firefox
 cd ~/
 git clone https://github.com/woodruffw/ff2mpv
-chmod +x ff2mpv/ff2mpv.py
-cd $SCRIPTPATH
-mkdir ~/.mozilla
-mkdir ~/.mozilla/native-messaging-hosts
-cp ff2mpv.json ~/.mozilla/native-messaging-hosts/
+cd ff2mpv
+./isntall.sh
+#chmod +x ff2mpv/ff2mpv.py
+#cd $SCRIPTPATH
+#mkdir ~/.mozilla
+#mkdir ~/.mozilla/native-messaging-hosts
+#cp ff2mpv.json ~/.mozilla/native-messaging-hosts/
 
 #chromium
 #sudo add-apt-repository -y ppa:saiarcot895/chromium-dev
@@ -196,5 +203,9 @@ sudo xiccd &
 # switch
 #colormgr device-add-profile 'xrandr-HP LP2465-CZK81701H0' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
 #colormgr device-add-profile 'xrandr-HP LP2465-CZK81103DD' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+#xps9560
+colormgr device-add-profile 'xrandr-eDP-1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+colormgr device-make-profile-default 'xrandr-eDP-1' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
+
 #colormgr device-make-profile-default 'xrandr-HP LP2465-CZK81701H0' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
 #colormgr device-make-profile-default 'xrandr-HP LP2465-CZK81103DD' 'icc-94b492f4a1dd646b0695aad80bf8ab6f'
