@@ -2,9 +2,10 @@
 
 SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
-MACHINE="T480"
+#MACHINE="T480"
 #MACHINE="XPS9560"
 #MACHINE="AUDIOPC"
+MACHINE="X250"
 
 sudo apt update; sudo apt dist-upgrade -y
 
@@ -21,7 +22,6 @@ then
 elif [ $MACHINE == "XPS9560" ]
 then
 	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text msr.allow_writes=on pci=noaer pcie_aspm=off\"/g" /etc/default/grub
-	#sudo sed -i "s/#GRUB_GFXMODE=.*/GRUB_GFXMODE=800x600/g" /etc/default/grub
 	sudo cp rc.localXps9560 /etc/rc.local
 elif [ $MACHINE == "AUDIOPC" ]
 then
@@ -29,6 +29,11 @@ then
 	cp Xresources ~/.Xresources
 	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text\"/g" /etc/default/grub
 	sudo cp rc.local /etc/
+elif [ $MACHINE == "X250" ]
+then
+	sudo sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet text\"/g" /etc/default/grub
+	sudo sed -i "s/#GRUB_GFXMODE=.*/GRUB_GFXMODE=800x600/g" /etc/default/grub
+	sudo cp rc.localX250 /etc/rc.local
 else
  echo "No machine selected";
  exit 1;
@@ -100,6 +105,21 @@ then
 	#intel
 	sudo mkdir /etc/X11/xorg.conf.d/
 	sudo cp 20-intel.conf /etc/X11/xorg.conf.d/
+elif [ $MACHINE == "X250" ]
+then
+	cd ~/
+	git clone https://github.com/kitsunyan/intel-undervolt.git
+	cd intel-undervolt
+	./configure
+	make
+	sudo make install
+
+	cd $SCRIPTPATH
+	sudo cp intel-undervoltX250.conf /etc/intel-undervolt.conf
+
+	#intel
+	#sudo mkdir /etc/X11/xorg.conf.d/
+	#sudo cp 20-intel.conf /etc/X11/xorg.conf.d/
 elif [ $MACHINE == "XPS9560" ]
 then
 	cd ~/
@@ -116,8 +136,6 @@ then
 
 	#nvidia
 	sudo apt-get -y purge nvidia-*
-	sudo add-apt-repository -y ppa:graphics-drivers/ppa
-	sudo apt update;
 	sudo apt -y install nvidia-driver-495
 
 	#intel
@@ -152,9 +170,9 @@ git config --global credential.helper 'cache --timeout=36000'
 #sudo apt -y install net-tools
 
 # update mpv
-sudo add-apt-repository -y ppa:mc3man/mpv-tests
-sudo sed -i "s/hirsute/groovy/g" /etc/apt/sources.list.d/mc3man-ubuntu-mpv-tests-hirsute.list
-sudo apt-get update
+#sudo add-apt-repository -y ppa:mc3man/mpv-tests
+#sudo sed -i "s/hirsute/groovy/g" /etc/apt/sources.list.d/mc3man-ubuntu-mpv-tests-hirsute.list
+#sudo apt-get update
 
 # multimedia
 sudo apt-get purge -y totem*
@@ -175,10 +193,10 @@ cd ff2mpv
 ./install.sh
 
 #install latest 5.15 kernel
-sudo add-apt-repository -y ppa:tuxinvader/lts-mainline
-sudo sed -i "s/hirsute/focal/g" /etc/apt/sources.list.d/tuxinvader-ubuntu-lts-mainline-hirsute.list
-sudo apt-get update
-sudo apt-get install -y linux-generic-5.15
+#sudo add-apt-repository -y ppa:tuxinvader/lts-mainline
+#sudo sed -i "s/hirsute/focal/g" /etc/apt/sources.list.d/tuxinvader-ubuntu-lts-mainline-hirsute.list
+#sudo apt-get update
+#sudo apt-get install -y linux-generic-5.15
 
 # intall new spice viewer
 sudo apt-get install -y meson libgtk-3-dev libvirt-glib-1.0-dev libvirt-dev libgtk-vnc-2.0-dev libspice-client-gtk-3.0-dev libspice-client-glib-2.0-dev cmake libgovirt-dev librest-dev libvte-dev libgovirt-dev librest-dev libvte-2.91-dev
@@ -196,9 +214,9 @@ sudo cp virt-viewer /usr/bin/
 
 # enable wayland
 sudo apt-get install -y bleachbit gnome-tweaks
-sudo sed -i "s/#WaylandEnable.*/WaylandEnable=true/g" /etc/gdm3/custom.conf
-sudo rm -rf /usr/share/gnome-shell/extensions/ding@rastersoft.com/
-gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']"
+sudo sed -i "s/WaylandEnable.*/WaylandEnable=true/g" /etc/gdm3/custom.conf
+sudo rm -rf /usr/share/gnome-shell/extensions/ding@rastersoft.com/ solved
+#gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']" # solved
 
 
 #eclipse
@@ -217,6 +235,7 @@ mv eclipse* eclipse
 #cp xbindkeysrc ~/.xbindkeysrc
 
 #clean apt cache dir
+sudo apt-get -y autoremove --purge
 sudo rm /var/cache/apt/archives/*.deb
 #clean dmenu to force a rebuild
 #rm ~/.cache/dmenu_run
